@@ -3,7 +3,11 @@ RESTful Library Service
 
 $ mvn clean package
 
-$ java -jar target/library-0.0.1-SNAPSHOT.jar server config/dev_config.yml 
+# To launch Library A instance
+$ java -jar target/library-0.0.1-SNAPSHOT.jar server config/library_a_config.yml 
+
+# To launch Library B instance
+$ java -jar target/library-0.0.1-SNAPSHOT.jar server config/library_b_config.yml 
 
 # How to run this Java process forever
 $ nohup ./bin/dev.sh 0<&- &> /tmp/app.log &
