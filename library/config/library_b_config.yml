@@ -25,7 +25,7 @@ http:
   port: 8002
 
   # The port on which the HTTP server listens for administrative requests.
-  adminPort: 8082
+  adminPort: 9002
 
 # Logging settings.
 logging:

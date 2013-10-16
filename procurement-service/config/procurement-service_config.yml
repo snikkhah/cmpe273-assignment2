@@ -25,7 +25,7 @@ http:
   port: 8080
 
   # The port on which the HTTP server listens for administrative requests.
-  adminPort: 8081
+  adminPort: 9000
 
 # Logging settings.
 logging:
