@@ -27,7 +27,7 @@ public class BookRepository implements BookRepositoryInterface {
 	ConcurrentHashMap<Long, Book> bookMap = new ConcurrentHashMap<Long, Book>();
 	Book book = new Book();
 	book.setIsbn(1);
-	book.setCategory("Computer");
+	book.setCategory("computer");
 	book.setTitle("Java Concurrency in Practice");
 	try {
 	    book.setCoverimage(new URL("http://goo.gl/N96GJN"));
@@ -38,7 +38,7 @@ public class BookRepository implements BookRepositoryInterface {
 
 	book = new Book();
 	book.setIsbn(2);
-	book.setCategory("Computer");
+	book.setCategory("computer");
 	book.setTitle("Restful Web Services");
 	try {
 	    book.setCoverimage(new URL("http://goo.gl/ZGmzoJ"));

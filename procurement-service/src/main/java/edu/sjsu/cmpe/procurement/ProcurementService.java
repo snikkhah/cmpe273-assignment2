@@ -26,11 +26,8 @@ public class ProcurementService extends Service<ProcurementServiceConfiguration>
     public void run(ProcurementServiceConfiguration configuration,
 	    Environment environment) throws Exception {
 	String queueName = configuration.getStompQueueName();
-	String allBooksTopicName = configuration.getStompAllBooksTopicName();
-	String computerBooksTopicName = configuration
-		.getStompComputerBooksTopicName();
-	log.debug("Queue name is {}. Supported topics are {} and {}",
-		queueName, allBooksTopicName, computerBooksTopicName);
+	String topicName = configuration.getStompTopicName();
+	log.debug("Queue name is {}. Topic is {}", queueName, topicName);
 	// TODO: Apollo STOMP Broker URL and login
 
     }

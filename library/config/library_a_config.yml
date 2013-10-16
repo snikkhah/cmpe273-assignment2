@@ -4,11 +4,11 @@
 
 # Apollo STOMP Broker Configuration
 # FIXME - Replace 99999 with your ID
-stompQueueName: /queue/99999-book-orders
+stompQueueName: /queue/99999.book.orders
 
 # Library A subscribes to all book categories
 # FIXME - Replace 99999 with your ID
-stompTopicName: /topic/99999-all-books
+stompTopicName: /topic/99999.book.*
 
 # TODO: Apollo STOMP Broker URL and login
 #apolloUser: "admin"

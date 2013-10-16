@@ -12,11 +12,7 @@ public class ProcurementServiceConfiguration extends Configuration {
 
     @NotEmpty
     @JsonProperty
-    private String stompAllBooksTopicName;
-
-    @NotEmpty
-    @JsonProperty
-    private String stompComputerBooksTopicName;
+    private String stompTopicName;
 
     /**
      * @return the stompQueueName
@@ -34,34 +30,17 @@ public class ProcurementServiceConfiguration extends Configuration {
     }
 
     /**
-     * @return the stompAllBooksTopicName
+     * @return the stompTopicName
      */
-    public String getStompAllBooksTopicName() {
-	return stompAllBooksTopicName;
+    public String getStompTopicName() {
+	return stompTopicName;
     }
 
     /**
-     * @param stompAllBooksTopicName
-     *            the stompAllBooksTopicName to set
+     * @param stompTopicName
+     *            the stompTopicName to set
      */
-    public void setStompAllBooksTopicName(String stompTopicName) {
-	this.stompAllBooksTopicName = stompTopicName;
+    public void setStompTopicName(String stompTopicName) {
+	this.stompTopicName = stompTopicName;
     }
-
-    /**
-     * @return the stompComputerBooksTopicName
-     */
-    public String getStompComputerBooksTopicName() {
-	return stompComputerBooksTopicName;
-    }
-
-    /**
-     * @param stompComputerBooksTopicName
-     *            the stompComputerBooksTopicName to set
-     */
-    public void setStompComputerBooksTopicName(
-	    String stompComputerBooksTopicName) {
-	this.stompComputerBooksTopicName = stompComputerBooksTopicName;
-    }
-
 }
