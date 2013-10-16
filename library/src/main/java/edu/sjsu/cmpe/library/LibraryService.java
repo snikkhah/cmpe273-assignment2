@@ -6,12 +6,14 @@ import org.slf4j.LoggerFactory;
 import com.yammer.dropwizard.Service;
 import com.yammer.dropwizard.config.Bootstrap;
 import com.yammer.dropwizard.config.Environment;
+import com.yammer.dropwizard.views.ViewBundle;
 
 import edu.sjsu.cmpe.library.api.resources.BookResource;
 import edu.sjsu.cmpe.library.api.resources.RootResource;
 import edu.sjsu.cmpe.library.config.LibraryServiceConfiguration;
 import edu.sjsu.cmpe.library.repository.BookRepository;
 import edu.sjsu.cmpe.library.repository.BookRepositoryInterface;
+import edu.sjsu.cmpe.library.ui.resources.HomeResource;
 
 public class LibraryService extends Service<LibraryServiceConfiguration> {
 
@@ -24,6 +26,7 @@ public class LibraryService extends Service<LibraryServiceConfiguration> {
     @Override
     public void initialize(Bootstrap<LibraryServiceConfiguration> bootstrap) {
 	bootstrap.setName("library-service");
+	bootstrap.addBundle(new ViewBundle());
     }
 
     @Override
@@ -41,5 +44,8 @@ public class LibraryService extends Service<LibraryServiceConfiguration> {
 	/** Books APIs */
 	BookRepositoryInterface bookRepository = new BookRepository();
 	environment.addResource(new BookResource(bookRepository));
+
+	/** UI Resources */
+	environment.addResource(new HomeResource(bookRepository));
     }
 }
