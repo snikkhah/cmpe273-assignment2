@@ -93,4 +93,17 @@ public class BookRepository implements BookRepositoryInterface {
 	return new ArrayList<Book>(bookInMemoryMap.values());
     }
 
+    /*
+     * Delete a book from the map by the isbn. If the given ISBN was invalid, do
+     * nothing.
+     * 
+     * @see
+     * edu.sjsu.cmpe.library.repository.BookRepositoryInterface#delete(java.
+     * lang.Long)
+     */
+    @Override
+    public void delete(Long isbn) {
+	bookInMemoryMap.remove(isbn);
+    }
+
 }

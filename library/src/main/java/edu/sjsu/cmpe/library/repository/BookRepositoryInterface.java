@@ -36,4 +36,12 @@ public interface BookRepositoryInterface {
      * @return a list of books
      */
     List<Book> getAllBooks();
+
+    /**
+     * Delete an existing book
+     * 
+     * @param isbn
+     *            an ISBN of the book to be deleted
+     */
+    void delete(Long isbn);
 }

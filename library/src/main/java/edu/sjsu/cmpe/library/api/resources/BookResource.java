@@ -2,6 +2,7 @@ package edu.sjsu.cmpe.library.api.resources;
 
 import javax.validation.Valid;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.DefaultValue;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -93,6 +94,17 @@ public class BookResource {
 	bookResponse.addLink(new LinkDto("view-book", location, "GET"));
 
 	return Response.status(200).entity(bookResponse).build();
+    }
+
+    @DELETE
+    @Path("/{isbn}")
+    @Timed(name = "delete-book")
+    public BookDto deleteBook(@PathParam("isbn") LongParam isbn) {
+	bookRepository.delete(isbn.get());
+	BookDto bookResponse = new BookDto(null);
+	bookResponse.addLink(new LinkDto("create-book", "/books", "POST"));
+
+	return bookResponse;
     }
 }
 
