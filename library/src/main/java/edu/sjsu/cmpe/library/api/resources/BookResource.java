@@ -1,5 +1,16 @@
 package edu.sjsu.cmpe.library.api.resources;
 
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.HashMap;
+
+import javax.jms.Connection;
+import javax.jms.DeliveryMode;
+import javax.jms.Destination;
+import javax.jms.JMSException;
+import javax.jms.MessageProducer;
+import javax.jms.Session;
+import javax.jms.TextMessage;
 import javax.validation.Valid;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
@@ -13,6 +24,8 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+
+import org.fusesource.stomp.jms.StompJmsDestination;
 
 import com.yammer.dropwizard.jersey.params.LongParam;
 import com.yammer.metrics.annotation.Timed;
@@ -30,15 +43,55 @@ import edu.sjsu.cmpe.library.repository.BookRepositoryInterface;
 public class BookResource {
     /** bookRepository instance */
     private final BookRepositoryInterface bookRepository;
-
+    private final Connection connection;
+    private final String libraryName;
+    private final String queueName;
     /**
      * BookResource constructor
      * 
      * @param bookRepository
      *            a BookRepository instance
      */
-    public BookResource(BookRepositoryInterface bookRepository) {
+    public BookResource(BookRepositoryInterface bookRepository, Connection connection, String libraryName, String queuName) {
 	this.bookRepository = bookRepository;
+	this.connection=connection;
+	this.libraryName=libraryName;
+	this.queueName=queuName;
+	
+	Book book = new Book();
+	book.setCategory("computer");
+	book.setTitle("Java Concurrency in Practice");
+	try {
+	    book.setCoverimage(new URL("http://goo.gl/N96GJN"));
+	} catch (MalformedURLException e) {
+	    // eat the exception
+	}
+	bookRepository.saveBook(book);
+	book = new Book();
+	book.setCategory("computer");
+	book.setTitle("Restful Web Services");
+	try {
+	    book.setCoverimage(new URL("http://goo.gl/ZGmzoJ"));
+	} catch (MalformedURLException e) {
+	    // eat the exception
+	}
+	bookRepository.saveBook(book);
+
+    }
+
+    public void sendMessage(long isbn) throws JMSException{
+//    	String queue = "/queue/59640.book.orders";
+		String destination = queueName;
+		Session session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
+		Destination dest = new StompJmsDestination(destination);
+		MessageProducer producer = session.createProducer(dest);
+		producer.setDeliveryMode(DeliveryMode.NON_PERSISTENT);
+
+		System.out.println("Sending messages to " + queueName + "...");
+		String data = libraryName+":"+isbn; 
+		TextMessage msg = session.createTextMessage(data);
+		msg.setLongProperty("id", System.currentTimeMillis());
+		producer.send(msg);
     }
 
     @GET
@@ -85,10 +138,14 @@ public class BookResource {
     @Path("/{isbn}")
     @Timed(name = "update-book-status")
     public Response updateBookStatus(@PathParam("isbn") LongParam isbn,
-	    @DefaultValue("available") @QueryParam("status") Status status) {
+	    @DefaultValue("available") @QueryParam("status") Status status) throws JMSException {
 	Book book = bookRepository.getBookByISBN(isbn.get());
+	
+	
+	if ((status == Status.lost) && (book.getStatus()!=Status.lost)){
+		sendMessage(book.getIsbn());
+	}
 	book.setStatus(status);
-
 	BookDto bookResponse = new BookDto(book);
 	String location = "/books/" + book.getIsbn();
 	bookResponse.addLink(new LinkDto("view-book", location, "GET"));

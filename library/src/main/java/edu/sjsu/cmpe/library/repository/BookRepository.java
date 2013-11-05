@@ -16,17 +16,18 @@ public class BookRepository implements BookRepositoryInterface {
     private final ConcurrentHashMap<Long, Book> bookInMemoryMap;
 
     /** Never access this key directly; instead use generateISBNKey() */
-    private long isbnKey;
+    private static long isbnKey;
 
     public BookRepository() {
-	bookInMemoryMap = seedData();
+	bookInMemoryMap = new ConcurrentHashMap<Long, Book>();
+//	seedData();
 	isbnKey = 0;
     }
 
-    private ConcurrentHashMap<Long, Book> seedData(){
-	ConcurrentHashMap<Long, Book> bookMap = new ConcurrentHashMap<Long, Book>();
+    private void seedData(){
+//	ConcurrentHashMap<Long, Book> bookMap = new ConcurrentHashMap<Long, Book>();
 	Book book = new Book();
-	book.setIsbn(1);
+//	book.setIsbn(generateISBNKey());
 	book.setCategory("computer");
 	book.setTitle("Java Concurrency in Practice");
 	try {
@@ -34,10 +35,11 @@ public class BookRepository implements BookRepositoryInterface {
 	} catch (MalformedURLException e) {
 	    // eat the exception
 	}
-	bookMap.put(book.getIsbn(), book);
+	saveBook(book);
+//	bookInMemoryMap.put(book.getIsbn(), book);
 
 	book = new Book();
-	book.setIsbn(2);
+//	book.setIsbn(generateISBNKey());
 	book.setCategory("computer");
 	book.setTitle("Restful Web Services");
 	try {
@@ -45,9 +47,10 @@ public class BookRepository implements BookRepositoryInterface {
 	} catch (MalformedURLException e) {
 	    // eat the exception
 	}
-	bookMap.put(book.getIsbn(), book);
+	saveBook(book);
+//	bookInMemoryMap.put(book.getIsbn(), book);
 
-	return bookMap;
+//	return bookMap;
     }
 
     /**
@@ -58,7 +61,10 @@ public class BookRepository implements BookRepositoryInterface {
      */
     private final Long generateISBNKey() {
 	// increment existing isbnKey and return the new value
-	return Long.valueOf(++isbnKey);
+    	++isbnKey;
+    	while (bookInMemoryMap.containsKey(isbnKey)){++isbnKey;}
+	return Long.valueOf(isbnKey);
+   	
     }
 
     /**
@@ -68,12 +74,14 @@ public class BookRepository implements BookRepositoryInterface {
     public Book saveBook(Book newBook) {
 	checkNotNull(newBook, "newBook instance must not be null");
 	// Generate new ISBN
+	if (newBook.getIsbn()== 0){
 	Long isbn = generateISBNKey();
 	newBook.setIsbn(isbn);
+	}
 	// TODO: create and associate other fields such as author
 
 	// Finally, save the new book into the map
-	bookInMemoryMap.putIfAbsent(isbn, newBook);
+	bookInMemoryMap.putIfAbsent(newBook.getIsbn(), newBook);
 
 	return newBook;
     }

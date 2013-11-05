@@ -1,5 +1,8 @@
 package edu.sjsu.cmpe.procurement.config;
 
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
+
 import org.hibernate.validator.constraints.NotEmpty;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -43,4 +46,5 @@ public class ProcurementServiceConfiguration extends Configuration {
     public void setStompTopicName(String stompTopicName) {
 	this.stompTopicName = stompTopicName;
     }
+
 }

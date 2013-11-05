@@ -1,0 +1,11 @@
+To DO:
+0. How to know which library is sending? DONE
+1. send in Json format or String? DONE
+2. How to Use Job?
+3. extract files and handle the library a or b? CHECK Q7
+4. make array and send
+5. can be received as objects or array of objects or only text ? DONE
+6. how to deploy on EC2? how many instances ?
+7. if either library loose a book libA receive in anyways and libB receive if it is computer?
+
+	
